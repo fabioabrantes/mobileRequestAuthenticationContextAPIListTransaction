@@ -1,6 +1,6 @@
-import {useCallback, useState} from 'react';
+import { useState} from 'react';
 import {KeyboardAvoidingView,TouchableWithoutFeedback, Keyboard} from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import {useForm,Controller} from'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -13,7 +13,6 @@ import {Button} from '../../components/Button';
 import {Input} from '../../components/Input';
 import { ErrorInput } from '../../components/ErrorInput';
 
-import {TransactionDTO} from '../../dto/TransactionDTO';
 
 import { 
   Container,
@@ -44,10 +43,10 @@ interface IClient{
 
 export function RegisterTransaction() {
   const [isLoading, setIsLoading] = useState(false);
-  const [client, setClient] = useState<IClient>({} as IClient);
+
 
   const navigation = useNavigation();
-  const {deslogar} = useAuth(); 
+  const {deslogar,nameUser} = useAuth(); 
 
   const {
     control, 
@@ -73,18 +72,6 @@ export function RegisterTransaction() {
     await deslogar();
   }
 
-  useFocusEffect(useCallback(() => {
-    
-    setIsLoading(true);
-    //consulta a API  
-    api.get('transactions').then(response => {
-      const transactionsTemp = response.data as TransactionDTO[];
-      setClient(transactionsTemp[0].client);
-    });
-    setIsLoading(false);
-      
-},[])
-);
 
   return (
     <Container>
@@ -95,7 +82,7 @@ export function RegisterTransaction() {
                 <UserInfo>
                   <Photo source={{uri:'https://avatars.githubusercontent.com/u/62598805?v=4'}}/>
                   <User>
-                    <UserName>{client?.name}</UserName>
+                    <UserName>{nameUser}</UserName>
                   </User>
                 </UserInfo>
 
@@ -118,7 +105,7 @@ export function RegisterTransaction() {
                       onChangeText={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="credits ou debits?"
+                      placeholder="credits ou debit?"
                       autoCorrect={false}/* não fica corrigindo palavras */
                       autoCapitalize="none" /* não fica induzindo a colocar a primeira letra maiúscula */
                     />

@@ -27,7 +27,7 @@ export const schemaValidationRegisterClient = z.object({
 });
 
 export const schemaValidationRegisterTransaction = z.object({
-      amount: z.number().nonnegative('o numero tem que ser maior ou igual a zero'),
+      amount: z.coerce.number().nonnegative('o numero tem que ser maior ou igual a zero'),
       type: z.string().trim()
             .refine((value) => value.length !== 0, { message: 'Por favor, forneça o tipo de transação!' }),
 });
